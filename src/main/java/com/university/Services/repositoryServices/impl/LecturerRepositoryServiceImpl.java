@@ -6,10 +6,17 @@ import com.university.repository.LecturerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class LecturerRepositoryServiceImpl implements LecturerRepositoryService {
     @Autowired
     private LecturerRepository lecturerRepository;
+
+    @Override
+    public List<Lecturer> lecturerSearch(String searchString) {
+        return lecturerRepository.lecturerSearch(searchString);
+    }
 
     @Override
     public Lecturer findOne(Long id) {

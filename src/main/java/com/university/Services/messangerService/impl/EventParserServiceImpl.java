@@ -2,6 +2,8 @@ package com.university.Services.messangerService.impl;
 
 
 import com.university.Services.messangerService.*;
+import com.university.Services.repositoryServices.UserRepositoryService;
+import com.university.Services.supportServices.SupportService;
 import com.university.models.messanger.Entry;
 import com.university.models.messanger.Event;
 import com.university.models.messanger.Messaging;
@@ -16,8 +18,10 @@ public class EventParserServiceImpl implements EventParserService {
     private MessageSenderService messageSenderService;
     @Autowired
     private MessageParserService messageParserService;
-
-
+    @Autowired
+    private SupportService supportService;
+    @Autowired
+    private UserRepositoryService userRepositoryService;
     @Autowired
     private PayloadParserService payloadParserService;
 
@@ -47,7 +51,10 @@ public class EventParserServiceImpl implements EventParserService {
 
                     ex.printStackTrace();
                     logger.warn(ex);
-                    messageSenderService.errorMessage(messaging.getSender().getId());
+                    if(userRepositoryService.findById(messaging.getSender().getId() )!=null) {
+                        supportService.changeUserStatus(messaging.getSender().getId(), null);
+                        messageSenderService.sendUniActions(messaging);
+                    }
                     return true;
                 }
             }

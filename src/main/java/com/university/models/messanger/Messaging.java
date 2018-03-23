@@ -33,16 +33,5 @@ public class Messaging {
 
     }
 
-    @Override
-    public String toString() {
-        return "Messaging{" +
-                "messagingType='" + messagingType + '\'' +
-                ", sender=" + sender +
-                ", recipient=" + recipient.getId() +
-                ", timestamp=" + timestamp +
-                ", message=" + message.getMid() +
-                ", postback=" + postback +
-                ", tag='" + tag + '\'' +
-                '}';
-    }
+
 }

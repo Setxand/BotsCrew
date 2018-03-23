@@ -29,4 +29,9 @@ public class Lecturer {
         this.salary = salary;
         this.degree = degree;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

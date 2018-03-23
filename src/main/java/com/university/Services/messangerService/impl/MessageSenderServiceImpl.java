@@ -4,7 +4,6 @@ import com.university.Services.messangerService.MessageSenderService;
 import com.university.models.messanger.*;
 import com.university.models.messanger.Requests.RequestByMessage;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.university.enums.payloads.PostBackPayloads.HEAD_OF_THE_DEPARTMENT;
+import static com.university.enums.payloads.PostBackPayloads.*;
+import static com.university.enums.types.ButtonTypes.postback;
 
 
 @Service
@@ -89,16 +89,43 @@ public class MessageSenderServiceImpl implements MessageSenderService {
 
     @Override
     public void sendUniActions(Messaging messaging) {
-        List<Button> buttons = new ArrayList<>();
-        Button button = new Button("postback","head of department",HEAD_OF_THE_DEPARTMENT.name());
-        buttons.add(button);
-        sendButtons(buttons,"Hey, it`s your university!!!",messaging.getSender().getId());
+        List<List<Button>>lists;
+        List<Button> buttons = Arrays.asList(new Button(postback.name(),"head of department", HEAD_OF_THE_DEPARTMENT_PAYLOAD.name())
+        ,new Button(postback.name(),"department statistic",DEPARTMENT_STATISTIC_PAYLOAD.name())
+        ,new Button(postback.name(),"dep. average salary", AVG_SALARY_PAYLOAD.name()));
+
+        List<Button> buttons1 = Arrays.asList(new Button(postback.name(),"count of employee", COUNT_OF_EMPLOYEE_PAYLOAD.name())
+        ,new Button(postback.name(),"global search",GLOBAL_SEARCH_PAYLOAD.name()));
+        lists = Arrays.asList(buttons,buttons1);
+        makeGenericAndSend(lists,messaging);
+//        sendButtons(buttons,"Hey, it`s your university!!!",messaging.getSender().getId());
+    }
+
+    private void makeGenericAndSend(List<List<Button>> lists, Messaging messaging) {
+        Attachment attachment = new Attachment();
+        attachment.setType("template");
+        Payload payload = new Payload();
+        attachment.setPayload(payload);
+        List<Element> elements = new ArrayList<>();
+        payload.setElements(elements);
+        payload.setButtons(null);
+        payload.setTemplateType("generic");
+
+        for(List<Button> list: lists){
+            Element element = new Element();
+            element.setTitle("University actions");
+            element.setButtons(list);
+            elements.add(element);
+        }
+        Message message = new Message();
+        message.setAttachment(attachment);
+        messaging.setMessage(message);
+        sendMessage(new Messaging(message,new Recipient(messaging.getSender().getId())));
     }
 
 
     @Override
-    public @ResponseBody
-    void sendMessage(Messaging messaging) {
+    public @ResponseBody void sendMessage(Messaging messaging) {
         ResponseEntity<?> response = new RestTemplate().postForEntity(FACEBOOK_SEND_URL + PAGE_ACCESS_TOKEN, messaging, RequestByMessage.class);
         logger.info("Message has been sent... Message info: " + response.getBody());
     }

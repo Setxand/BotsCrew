@@ -2,23 +2,14 @@ package com.university.Services.repositoryServices.impl;
 
 import com.university.Services.repositoryServices.DepartmentRepositoryService;
 import com.university.Services.repositoryServices.LecturerRepositoryService;
-import com.university.Services.repositoryServices.StatisticRepositoryService;
 import com.university.Services.supportServices.SupportService;
-import com.university.Services.universityService.UniService;
 import com.university.entities.Department;
 import com.university.entities.Lecturer;
-import com.university.entities.Statistic;
 import com.university.enums.Degree;
 import com.university.university.UniversityApplicationTests;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Map;
-
-import static org.junit.Assert.*;
 
 public class DepartmentRepositoryServiceImplTest extends UniversityApplicationTests {
 
@@ -27,17 +18,13 @@ public class DepartmentRepositoryServiceImplTest extends UniversityApplicationTe
     @Autowired
     private LecturerRepositoryService lecturerRepositoryService;
     @Autowired
-    private StatisticRepositoryService statisticRepositoryService;
-    @Autowired
     private SupportService supportService;
     private Department department;
     private Lecturer lecturer;
-    private Statistic statistic;
 
 
     @Before
     public void setUp() {
-        statisticSetUp();
         departmentSetUp();
         lecturerSetUp();
 
@@ -45,7 +32,6 @@ public class DepartmentRepositoryServiceImplTest extends UniversityApplicationTe
 
         departmentRepositoryService.saveAndFlush(department);
         lecturerRepositoryService.saveAndFlush(lecturer);
-        supportService.addInStatistic(lecturer,department);
         department.setHeadLecturerId(lecturer.getId());
         departmentRepositoryService.saveAndFlush(department);
 
@@ -71,7 +57,6 @@ public class DepartmentRepositoryServiceImplTest extends UniversityApplicationTe
     public void findByNameShowStatistic() throws Exception{
         String departmentName = "ASC";
         Department department = departmentRepositoryService.findByName(departmentName);
-        logger.info(department.getName()+" statistic :\n\n"+department.getStatistic());
 
     }
 
@@ -88,10 +73,7 @@ public class DepartmentRepositoryServiceImplTest extends UniversityApplicationTe
 
 
 
-    private void statisticSetUp() {
-        statistic = new Statistic();
 
-    }
 
     private void lecturerSetUp() {
         lecturer = new Lecturer("Martin Garrix",300D,Degree.PROFESSOR);
@@ -103,16 +85,12 @@ public class DepartmentRepositoryServiceImplTest extends UniversityApplicationTe
         department.addLecturer(lecturer2);
         departmentRepositoryService.saveAndFlush(department);
         lecturerRepositoryService.saveAndFlush(lecturer1);
-        supportService.addInStatistic(lecturer1,department);
         lecturerRepositoryService.saveAndFlush(lecturer2);
-        supportService.addInStatistic(lecturer2,department);
     }
 
     private void departmentSetUp() {
         department = new Department();
         department.setName("ASC");
-        department.setStatistic(statistic);
-        statisticRepositoryService.saveAndFlush(statistic);
 
         departmentRepositoryService.saveAndFlush(department);
 

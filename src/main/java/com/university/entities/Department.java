@@ -15,14 +15,10 @@ import java.util.List;
 public class Department {
     @Id
     @GeneratedValue
-    private Long Id;
+    private Long id;
     private String name;
-    private Integer salary;
-    private Integer employee_count;
     private Long headLecturerId;
-    @OneToOne
-    @JoinColumn(name = "statistic_id")
-    private Statistic statistic;
+
 
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Lecturer> lecturers = new ArrayList<>();
@@ -37,5 +33,8 @@ public class Department {
         lecturer.getDepartments().remove(this);
     }
 
-
+    @Override
+    public String toString() {
+        return name;
+    }
 }
