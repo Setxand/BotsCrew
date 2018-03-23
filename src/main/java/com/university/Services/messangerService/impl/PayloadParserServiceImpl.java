@@ -27,8 +27,6 @@ public class PayloadParserServiceImpl implements PayloadParserService {
     private SupportService supportService;
     @Autowired
     private MessageSenderService messageSenderService;
-    @Autowired
-    private UniService uniService;
     @Override
     public void parsePayload(Messaging messaging) {
         String payload = messaging.getPostback().getPayload();

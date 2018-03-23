@@ -1,6 +1,7 @@
 package com.university.Services.supportServices.impl;
 
 import com.university.Services.repositoryServices.DepartmentRepositoryService;
+import com.university.Services.repositoryServices.LecturerRepositoryService;
 import com.university.Services.repositoryServices.UserRepositoryService;
 import com.university.Services.supportServices.SupportService;
 import com.university.entities.Department;
@@ -16,35 +17,26 @@ import java.util.*;
 @Service
 public class SupportServiceImpl implements SupportService {
     @Autowired
-    private DepartmentRepositoryService departmentRepositoryService;
+    private LecturerRepositoryService lecturerRepositoryService;
     @Autowired
     private UserRepositoryService userRepositoryService;
+
     @Override
     public Integer countOfEmployee(Department department) {
 
-       return department.getLecturers().size();
+        return department.getLecturers().size();
     }
 
     @Override
-    public Double avgSalary(Department department) {
-        List<Double>list = new ArrayList<>();
-        for(Lecturer lecturer: department.getLecturers()){
-            list.add(lecturer.getSalary());
-        }
-        OptionalDouble average = list
-                .stream()
-                .mapToDouble(a -> a)
-                .average();
-
-
-         return average.isPresent() ? average.getAsDouble() : 0;
+    public Float avgSalary(Department department) {
+        return lecturerRepositoryService.avgSalary();
 
     }
 
     @Override
     public Statistic stat(Department department) {
         Statistic statistic = new Statistic();
-        for(Lecturer lecturer: department.getLecturers()) {
+        for (Lecturer lecturer : department.getLecturers()) {
 
 
             Degree degree = lecturer.getDegree();

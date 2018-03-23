@@ -18,17 +18,16 @@ public class MessageParserServiceImpl implements MessageParserService {
     @Autowired
     private MessageSenderService messageSenderService;
     @Autowired
-    private SupportService supportService;
-    @Autowired
     private UserRepositoryService userRepositoryService;
     @Autowired
     private UniversityEventService universityEventService;
     @Autowired
     private QuickReplyParserService quickReplyParserService;
+
     @Override
     public void parseMessage(Messaging messaging) {
 
-        if(messaging.getMessage().getQuickReply()!=null){
+        if (messaging.getMessage().getQuickReply() != null) {
             quickReplyParserService.parseQuickReply(messaging);
             return;
         }
@@ -36,11 +35,11 @@ public class MessageParserServiceImpl implements MessageParserService {
         User user = userRepositoryService.findById(messaging.getSender().getId());
         String command = messaging.getMessage().getText().toUpperCase();
 
-        if(user.getUserStatus()!=null){
+        if (user.getUserStatus() != null) {
             command = user.getUserStatus();
         }
 
-        switch (MessageParserCommands.valueOf(command)){
+        switch (MessageParserCommands.valueOf(command)) {
             case HEY:
                 sendHello(messaging);
                 break;
@@ -71,7 +70,7 @@ public class MessageParserServiceImpl implements MessageParserService {
     }
 
     private void sendHello(Messaging messaging) {
-        messageSenderService.sendSimpleMessage("Hey, what`s upp?",messaging.getSender().getId());
+        messageSenderService.sendSimpleMessage("Hey, what`s upp?", messaging.getSender().getId());
     }
 
 }

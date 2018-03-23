@@ -20,9 +20,6 @@ import static com.university.enums.types.ButtonTypes.postback;
 
 @Service
 public class MessageSenderServiceImpl implements MessageSenderService {
-
-
-
     @Value("${page.access.token}")
     private String PAGE_ACCESS_TOKEN;
 
@@ -54,16 +51,6 @@ public class MessageSenderServiceImpl implements MessageSenderService {
 
         sendMessage(messaging);
     }
-
-
-
-
-
-
-
-
-
-
 
     @Override
     public void sendButtons(List<Button> buttons, String text, Long recipient) {

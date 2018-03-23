@@ -47,7 +47,7 @@ public class uniServiceImpl implements UniService {
     public void avgSalary(Messaging messaging) {
         String name = messaging.getMessage().getText();
         Department department = departmentRepositoryService.findByName(name);
-        Double avgSalary = supportService.avgSalary(department);
+        Float avgSalary = supportService.avgSalary(department);
         messageSenderService.sendSimpleMessage("Average salary of "+department.getName()+" is - "+avgSalary+"$",messaging.getSender().getId());
     }
 

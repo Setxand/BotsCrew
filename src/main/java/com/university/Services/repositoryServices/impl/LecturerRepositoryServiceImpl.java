@@ -32,4 +32,9 @@ public class LecturerRepositoryServiceImpl implements LecturerRepositoryService 
     public void delete(Lecturer lecturer) {
         lecturerRepository.delete(lecturer);
     }
+
+    @Override
+    public Float avgSalary() {
+        return lecturerRepository.findLecturersByAvgSalary();
+    }
 }
